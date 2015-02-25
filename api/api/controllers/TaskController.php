@@ -11,6 +11,7 @@ use app\models\Task;
 use app\models\TaskUser;
 use app\models\ExpertUser;
 use app\models\Skill;
+use \common\models\ApiTool;
 
 class TaskController extends ActiveController {
 
@@ -62,7 +63,7 @@ class TaskController extends ActiveController {
         $status = intval($status);
         $sort = intval($sort);
         $query = (new \yii\db\Query())
-                ->select('t.id task_id,t.title,t.status,t.uid,t.expert_id,cu.logo clogo,t.c_comment_level clevle,cu.area_x carea_x,cu.area_y carea_y')
+                ->select('cu.company_name cname,t.add_time,t.id task_id,t.title,t.status,t.uid,t.expert_id,cu.logo clogo,t.c_comment_level clevle,cu.area_x carea_x,cu.area_y carea_y')
                 ->from('it_task t,it_company_user cu');
 
         $query->where('t.uid=cu.uid');
@@ -93,6 +94,7 @@ class TaskController extends ActiveController {
                 //获取申请需求申请人数
                 $data[$k]['apply_num'] = TaskUser::find()->where('task_id=' . $v['task_id'])->count();
                 $data[$k]['clogo'] = $this->image_ip . $v['clogo'];
+                $data[$k]['add_time'] = date('Y-m-d',$v['add_time']);
             }
             $this->arr['data']['total'] = $total;
             $this->arr['data']['list'] = $data;
@@ -105,6 +107,7 @@ class TaskController extends ActiveController {
      */
     public function actionPublishNew() {
         $post_arr = Yii::$app->request->post();
+        $post_arr = ApiTool::post_format($post_arr);
         $title = isset($post_arr['title']) ? $post_arr['title'] : '';
         $content = isset($post_arr['content']) ? $post_arr['content'] : '';
         $category = isset($post_arr['category']) ? intval($post_arr['category']) : '0';
@@ -112,7 +115,7 @@ class TaskController extends ActiveController {
         $tips = isset($post_arr['tips']) ? $post_arr['tips'] : '';
         $reward = isset($post_arr['reward']) ? $post_arr['reward'] : ''; //悬赏
         $valid_end_time = isset($post_arr['valid_time']) ? $post_arr['valid_time'] : ''; //有效期截止
-        if (!empty($uid)&&!empty($title) && !empty($content) && !empty($category) && !empty($reward) && !empty($valid_end_time)) {
+        if (!empty($uid) && !empty($title) && !empty($content) && !empty($category) && !empty($reward) && !empty($valid_end_time)) {
             $model = new Task();
             if ($model) {
                 $model->uid = $uid;
@@ -120,6 +123,7 @@ class TaskController extends ActiveController {
                 $model->content = $content;
                 $model->category = $category;
                 $model->tips = $tips;
+                $model->add_time = time();
                 $model->reward = $reward;
                 $model->valid_end_time = strtotime($valid_end_time);
                 if (!$model->insert()) {
@@ -137,6 +141,7 @@ class TaskController extends ActiveController {
      */
     public function actionModify() {
         $post_arr = Yii::$app->request->post();
+        $post_arr = ApiTool::post_format($post_arr);
         $id = isset($post_arr['id']) ? intval($post_arr['id']) : '';
         $title = isset($post_arr['title']) ? $post_arr['title'] : '';
         $content = isset($post_arr['content']) ? $post_arr['content'] : '';
@@ -250,6 +255,7 @@ class TaskController extends ActiveController {
      */
     public function actionCompanyToExpertComment() {
         $post_arr = Yii::$app->request->post();
+        $post_arr = ApiTool::post_format($post_arr);
         $id = isset($post_arr['task_id']) ? intval($post_arr['task_id']) : ''; //项目id
         $comment_level = isset($post_arr['level']) ? intval($post_arr['level']) : ''; //评价等级
         $comment = isset($post_arr['comment']) ? $post_arr['comment'] : ''; //评价内容
@@ -283,6 +289,7 @@ class TaskController extends ActiveController {
      */
     public function actionExpertToCompanyComment() {
         $post_arr = Yii::$app->request->post();
+        $post_arr = ApiTool::post_format($post_arr);
         $id = isset($post_arr['task_id']) ? intval($post_arr['task_id']) : ''; //项目id
         $comment_level = isset($post_arr['level']) ? intval($post_arr['level']) : ''; //评价等级
         $comment = isset($post_arr['comment']) ? $post_arr['comment'] : ''; //评价内容
@@ -385,7 +392,7 @@ class TaskController extends ActiveController {
     function expertSkill($id = '0') {
         $skill_data = Skill::find()->select('id,name,parent_id')->asArray()->all();
 
-        $data = $this->tree($skill_data, $id);
+        $data = ApiTool::tree($skill_data, $id);
         if (!empty($id)) {
             $str = '';
             if (is_array($data) && !empty($data)) {
@@ -405,20 +412,6 @@ class TaskController extends ActiveController {
         }
     }
 
-    function tree($table, $p_id = '0', $id_column = 'id') {
-        $tree = array();
-        foreach ($table as $row) {
-            if ($row['parent_id'] == $p_id) {
-                $tmp = $this->tree($table, $row[$id_column], $id_column);
-                if ($tmp) {
-                    $row['children'] = $tmp;
-                } else {
-                    $row['leaf'] = true;
-                }
-                $tree[] = $row;
-            }
-        }
-        Return $tree;
-    }
+    
 
 }

@@ -12,6 +12,7 @@ use app\models\ExpertUser;
 use app\models\Skill;
 use app\models\Task;
 use yii\web\NotFoundHttpException;
+use \common\models\ApiTool;
 
 //use yii\db\Connection;
 
@@ -63,6 +64,7 @@ class UserController extends ActiveController {
      */
     public function actionCompanyRegister() {
         $post_arr = Yii::$app->request->post();
+        $post_arr = ApiTool::post_format($post_arr);
         $name = isset($post_arr['name']) ? $post_arr['name'] : '';
         $password = isset($post_arr['pwd']) ? md5($post_arr['pwd']) : '';
 
@@ -151,6 +153,7 @@ class UserController extends ActiveController {
      */
     public function actionExpertRegister() {
         $post_arr = Yii::$app->request->post();
+        $post_arr = ApiTool::post_format($post_arr);
         $name = isset($post_arr['name']) ? $post_arr['name'] : '';
         $password = isset($post_arr['pwd']) ? md5($post_arr['pwd']) : '';
 
@@ -296,6 +299,7 @@ class UserController extends ActiveController {
      */
     public function actionLogin() {
         $post_arr = Yii::$app->request->post();
+        $post_arr = ApiTool::post_format($post_arr);
         $name = isset($post_arr['name']) ? $post_arr['name'] : '';
         $area_x = isset($post_arr['area_x']) ? $post_arr['area_x'] : '';
         $area_y = isset($post_arr['area_y']) ? $post_arr['area_y'] : '';
@@ -393,6 +397,7 @@ class UserController extends ActiveController {
      */
     public function actionUpdateCompanyInfo() {
         $post_arr = Yii::$app->request->post();
+        $post_arr = ApiTool::post_format($post_arr);
         $uid = isset($post_arr['uid']) ? intval($post_arr['uid']) : '0';
         $privacy = isset($post_arr['privacy']) ? intval($post_arr['privacy']) : '0';
         $short_name = isset($post_arr['s_name']) ? $post_arr['s_name'] : '';
@@ -479,6 +484,7 @@ class UserController extends ActiveController {
     public function actionUpdateExpertInfo() {
 
         $post_arr = Yii::$app->request->post();
+        $post_arr = ApiTool::post_format($post_arr);
         $uid = isset($post_arr['uid']) ? intval($post_arr['uid']) : '0';
 
         $short_name = isset($post_arr['s_name']) ? $post_arr['s_name'] : '';
@@ -698,7 +704,7 @@ class UserController extends ActiveController {
      */
     public function actionSkillAll() {
         $data = Skill::find()->select('id,name,parent_id')->asArray()->all();
-        $this->arr['data'] = $this->tree($data);
+        $this->arr['data'] = ApiTool::tree($data);
         return $this->arr;
     }
 
@@ -741,86 +747,6 @@ class UserController extends ActiveController {
 
     function uploadedFiles($item) {
         return yii\web\UploadedFile::getInstancesByName($item);
-    }
-
-    /**
-     * 获取专家擅长
-     */
-    function expertSkill($id = '0') {
-        $skill_data = Skill::find()->select('id,name,parent_id')->asArray()->all();
-
-        $data = $this->tree($skill_data, $id);
-        if (!empty($id)) {
-            $str = '';
-            if (is_array($data) && !empty($data)) {
-                foreach ($data as $v) {
-                    $str.=$v['name'] . ' ';
-                    if (isset($v['children'])) {
-                        foreach ($v['children'] as $v1) {
-                            $str.=$v1['name'] . ' ';
-                        }
-                    }
-                    $str.=',';
-                }
-            }
-            return rtrim($str, ',');
-        } else {
-            return $data;
-        }
-    }
-
-    /**
-     * 截取UTF-8编码下字符串的函数
-     *
-     * @param   string      $str        被截取的字符串
-     * @param   int         $length     截取的长度
-     * @param   bool        $append     是否附加省略号
-     *
-     * @return  string
-     */
-    function subStr($str, $length = 0, $append = true) {
-        $str = trim($str);
-        $strlength = strlen($str);
-
-        if ($length == 0 || $length >= $strlength) {
-            return $str;
-        } elseif ($length < 0) {
-            $length = $strlength + $length;
-            if ($length < 0) {
-                $length = $strlength;
-            }
-        }
-
-        if (function_exists('mb_substr')) {
-            $newstr = mb_substr($str, 0, $length, 'utf-8');
-        } elseif (function_exists('iconv_substr')) {
-            $newstr = iconv_substr($str, 0, $length, 'utf-8');
-        } else {
-            //$newstr = trim_right(substr($str, 0, $length));
-            $newstr = substr($str, 0, $length);
-        }
-
-        if ($append && $str != $newstr) {
-            $newstr .= '...';
-        }
-
-        return $newstr;
-    }
-
-    function tree($table, $p_id = '0', $id_column = 'id') {
-        $tree = array();
-        foreach ($table as $row) {
-            if ($row['parent_id'] == $p_id) {
-                $tmp = $this->tree($table, $row[$id_column], $id_column);
-                if ($tmp) {
-                    $row['children'] = $tmp;
-                } else {
-                    $row['leaf'] = true;
-                }
-                $tree[] = $row;
-            }
-        }
-        Return $tree;
     }
 
 }
