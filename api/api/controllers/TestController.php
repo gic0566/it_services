@@ -8,6 +8,7 @@ use yii\web\Response;
 use yii\filters\VerbFilter;
 use app\models\CompanyUser;
 use yii\caching\MemCache;
+//use yii\log;
 
 class TestController extends ActiveController {
 
@@ -45,12 +46,15 @@ class TestController extends ActiveController {
         unset($actions['delete'], $actions['create']);
         return $actions;
     }
+    
 
     public function actionIndex1() {
 //        \Yii::$app->cache->memcache->init();
 //        Yii::$app->cache->memcache->setValue('12', 'asdfasdfasdf', 3600);
 //        return Yii::$app->cache->memcache->getValue('12');
-       echo md5((time() . '_' . (microtime() * 1000000)));
+//       echo md5((time() . '_' . (microtime() * 1000000)));
+//        yii::getLogger()->log('asdfasdfsadf', log\Logger::LEVEL_ERROR);
+        \yii::info('123131312');
     }
 
 }

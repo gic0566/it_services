@@ -107,13 +107,15 @@ class TaskController extends ActiveController {
         $post_arr = Yii::$app->request->post();
         $title = isset($post_arr['title']) ? $post_arr['title'] : '';
         $content = isset($post_arr['content']) ? $post_arr['content'] : '';
-        $category = isset($post_arr['category']) ? intval($post_arr['category']) : '';
+        $category = isset($post_arr['category']) ? intval($post_arr['category']) : '0';
+        $uid = isset($post_arr['uid']) ? intval($post_arr['uid']) : '0';
         $tips = isset($post_arr['tips']) ? $post_arr['tips'] : '';
         $reward = isset($post_arr['reward']) ? $post_arr['reward'] : ''; //悬赏
         $valid_end_time = isset($post_arr['valid_time']) ? $post_arr['valid_time'] : ''; //有效期截止
-        if (!empty($title) && !empty($content) && !empty($category) && !empty($tips) && !empty($reward) && !empty($valid_end_time)) {
+        if (!empty($uid)&&!empty($title) && !empty($content) && !empty($category) && !empty($reward) && !empty($valid_end_time)) {
             $model = new Task();
             if ($model) {
+                $model->uid = $uid;
                 $model->title = $title;
                 $model->content = $content;
                 $model->category = $category;
