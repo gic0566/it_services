@@ -240,6 +240,7 @@ class UserController extends ActiveController {
         $post_arr = Yii::$app->request->post();
         $id = isset($post_arr['auto_id']) ? intval($post_arr['auto_id']) : '';
         $upload = $this->uploadedFile('photo');
+        
         if (empty($id)) {
             $this->arr['errno'] = '0';
         }
@@ -255,6 +256,9 @@ class UserController extends ActiveController {
                 @unlink($uploadpath . $save_name);
                 $upload->saveAs($uploadpath . $save_name);
                 $model->logo = 'user/head/' . $save_name;
+                if(!$model->update()){
+                    $this->arr['errno'] = '0';
+                }
             }
         }
 
@@ -283,8 +287,12 @@ class UserController extends ActiveController {
             @unlink($uploadpath . $save_name);
             $upload->saveAs($uploadpath . $save_name);
             $model->logo = 'user/head/' . $save_name;
-            return;
+            if (!$model->update()) {
+                $this->arr['errno'] = '0';
+            }
         }
+
+        return $this->arr;
     }
 
     /**

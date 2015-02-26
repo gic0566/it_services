@@ -73,7 +73,11 @@ class TaskController extends ActiveController {
         }
 
         if (!empty($status)) {
-            $query->andWhere('t.status=' . $status);
+            if ($status != '9') {
+                $query->andWhere('t.status=' . $status);
+            }
+        } else {
+            $query->andWhere('t.status=0');
         }
 
         $query1 = clone $query;
@@ -94,8 +98,8 @@ class TaskController extends ActiveController {
                 //获取申请需求申请人数
                 $data[$k]['apply_num'] = TaskUser::find()->where('task_id=' . $v['task_id'])->count();
                 $data[$k]['clogo'] = $this->image_ip . $v['clogo'];
-                $data[$k]['add_time'] = date('Y-m-d',$v['add_time']);
-                if($v['status']!='0'&&!empty($v['expert_id'])){
+                $data[$k]['add_time'] = date('Y-m-d', $v['add_time']);
+                if ($v['status'] != '0' && !empty($v['expert_id'])) {
                     $expert_arr = ExpertUser::findOne($v['expert_id']);
                     $data[$k]['clogo'] = $this->image_ip . $expert_arr['logo'];
                     $data[$k]['cname'] = $expert_arr['true_name'];
@@ -416,7 +420,5 @@ class TaskController extends ActiveController {
             return $data;
         }
     }
-
-    
 
 }
