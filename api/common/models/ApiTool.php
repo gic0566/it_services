@@ -11,7 +11,7 @@ class ApiTool extends Model {
         $tree = array();
         foreach ($table as $row) {
             if ($row['parent_id'] == $p_id) {
-                $tmp = $this->tree($table, $row[$id_column], $id_column);
+                $tmp = self::tree($table, $row[$id_column], $id_column);
                 if ($tmp) {
                     $row['children'] = $tmp;
                 } else {

@@ -95,6 +95,11 @@ class TaskController extends ActiveController {
                 $data[$k]['apply_num'] = TaskUser::find()->where('task_id=' . $v['task_id'])->count();
                 $data[$k]['clogo'] = $this->image_ip . $v['clogo'];
                 $data[$k]['add_time'] = date('Y-m-d',$v['add_time']);
+                if($v['status']!='0'&&!empty($v['expert_id'])){
+                    $expert_arr = ExpertUser::findOne($v['expert_id']);
+                    $data[$k]['clogo'] = $this->image_ip . $expert_arr['logo'];
+                    $data[$k]['cname'] = $expert_arr['true_name'];
+                }
             }
             $this->arr['data']['total'] = $total;
             $this->arr['data']['list'] = $data;
@@ -346,7 +351,7 @@ class TaskController extends ActiveController {
         $task_id = intval($task_id);
 
         $query = (new \yii\db\Query())
-                ->select('eu.short_name,eu.true_name,eu.logo elogo,eu.province,eu.city,eu.district,eu.skill,eu.level,eu.area_x,eu.area_y')
+                ->select('eu.uid,eu.id auto_id,eu.short_name,eu.true_name,eu.logo elogo,eu.province,eu.city,eu.district,eu.skill,eu.level,eu.area_x,eu.area_y')
                 ->from('it_task_user tu,it_expert_user eu');
 
         $query->where('tu.proposer_id=eu.uid');
