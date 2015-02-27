@@ -56,14 +56,14 @@ class TaskController extends ActiveController {
      * 需求列表
      * @return type
      */
-    public function actionList($uid = '', $status = '', $sort = '', $from = '0', $limit = '10') {
+    public function actionList($uid = '', $status = '9', $sort = '', $from = '0', $limit = '10') {
         $from = intval($from);
         $limit = intval($limit);
         $uid = intval($uid); //公司id
         $status = intval($status);
         $sort = intval($sort);
         $query = (new \yii\db\Query())
-                ->select('cu.company_name cname,t.add_time,t.id task_id,t.title,t.status,t.uid,t.expert_id,cu.logo clogo,t.c_comment_level clevle,cu.area_x carea_x,cu.area_y carea_y')
+                ->select('t.category cat_id,cu.company_name cname,t.add_time,t.id task_id,t.title,t.status,t.uid,t.expert_id,cu.logo clogo,t.c_comment_level clevle,cu.area_x carea_x,cu.area_y carea_y')
                 ->from('it_task t,it_company_user cu');
 
         $query->where('t.uid=cu.uid');

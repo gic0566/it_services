@@ -710,9 +710,30 @@ class UserController extends ActiveController {
     /**
      * 获取专家分类数据
      */
-    public function actionSkillAll() {
+    public function actionSkillAll($cat_id = '0') {
         $data = Skill::find()->select('id,name,parent_id')->asArray()->all();
-        $this->arr['data'] = ApiTool::tree($data);
+        $data = ApiTool::tree($data);
+        if (!empty($cat_id)) {
+            //获取父类
+            $skill_model = Skill::findOne($cat_id);
+            if (is_array($data) && !empty($data)) {
+                foreach ($data as $k => $v) {
+                    $data[$k]['is_checked'] = '0';
+                    if ($v['id'] == $skill_model->parent_id) {
+                        $data[$k]['is_checked'] = '1';
+                        if (isset($v['children'])) {
+                            foreach ($v['children'] as $k1 => $v1) {
+                                $data[$k]['children'][$k1]['is_checked'] = '0';
+                                if ($v1['id'] == $cat_id) {
+                                    $data[$k]['children'][$k1]['is_checked'] = '1';
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        }
+        $this->arr['data'] = $data;
         return $this->arr;
     }
 
