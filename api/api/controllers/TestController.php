@@ -9,6 +9,7 @@ use yii\filters\VerbFilter;
 use app\models\CompanyUser;
 use yii\caching\MemCache;
 use \common\models\ApiTool;
+
 //use yii\log;
 
 class TestController extends ActiveController {
@@ -47,7 +48,6 @@ class TestController extends ActiveController {
         unset($actions['delete'], $actions['create']);
         return $actions;
     }
-    
 
     public function actionIndex1() {
 //        \Yii::$app->cache->memcache->init();
@@ -57,7 +57,7 @@ class TestController extends ActiveController {
 //        yii::getLogger()->log('asdfasdfsadf', log\Logger::LEVEL_ERROR);
 //        \yii::info('123131312');
 //        echo urldecode('%E8%94%A1%E9%B9%8F');
-        
+
         echo ApiTool::image_ip;
     }
 

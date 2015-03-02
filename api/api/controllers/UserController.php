@@ -240,7 +240,7 @@ class UserController extends ActiveController {
         $post_arr = Yii::$app->request->post();
         $id = isset($post_arr['auto_id']) ? intval($post_arr['auto_id']) : '';
         $upload = $this->uploadedFile('photo');
-        
+
         if (empty($id)) {
             $this->arr['errno'] = '0';
         }
@@ -256,7 +256,7 @@ class UserController extends ActiveController {
                 @unlink($uploadpath . $save_name);
                 $upload->saveAs($uploadpath . $save_name);
                 $model->logo = 'user/head/' . $save_name;
-                if(!$model->update()){
+                if (!$model->update()) {
                     $this->arr['errno'] = '0';
                 }
             }
@@ -338,6 +338,7 @@ class UserController extends ActiveController {
                         }
                     }
                 }
+                $user_data['role'] = $data['role'];
                 $user_data['auto_id'] = $user_data['id'];
                 $user_data['logo'] = $this->image_ip . $user_data['logo'];
                 $this->arr['data'] = $user_data;
@@ -385,7 +386,7 @@ class UserController extends ActiveController {
 
         $query = (new \yii\db\Query())
                 ->select('cu.short_name,cu.company_name,cu.logo clogo,cu.area_x,cu.area_y,cu.province,'
-                        . 'cu.city,cu.district,cu.summary,cu.mobile,cu.email,cu.comment_score,cu.job,cu.contacts')
+                        . 'cu.city,cu.district,cu.summary,cu.mobile,cu.email,cu.comment_score,cu.job,cu.contacts,cu.address')
                 ->from('it_company_user cu,it_user u,it_task t');
         $query->where('cu.uid=u.id');
         $query->andWhere('u.id=' . $uid);
@@ -649,7 +650,7 @@ class UserController extends ActiveController {
 
         $query = (new \yii\db\Query())
                 ->select('eu.short_name,eu.true_name,eu.logo elogo,eu.level,eu.skill,eu.area_x,eu.area_y,eu.province,'
-                        . 'eu.city,eu.district,eu.length_service service,eu.summary,eu.mobile,eu.email')
+                        . 'eu.city,eu.district,eu.length_service service,eu.summary,eu.mobile,eu.email,eu.cu.address')
                 ->from('it_expert_user eu,it_user u');
         $query->where('eu.uid=u.id');
         $query->andWhere('u.id=' . $uid);

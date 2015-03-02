@@ -95,7 +95,7 @@ class AutorunController extends ActiveController {
                 $data[$k]['online_status'] = (time() - $v['login_time']) > 3600 ? 'off' : 'on';
             }
         }
-        $this->arr['data'] = $data;
+        $this->arr['data'] = array_values($data);
         return $this->arr;
     }
 
@@ -147,7 +147,7 @@ class AutorunController extends ActiveController {
                 $data[$k]['task_num'] = $task_num;
             }
         }
-        $this->arr['data'] = $data;
+        $this->arr['data'] = array_values($data);
         return $this->arr;
     }
 

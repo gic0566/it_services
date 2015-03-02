@@ -66,16 +66,16 @@ if (strpos($rStr, '/')) {
         <li class="<?php echo $rArr0 == 'user' ? 'active open' : ''; ?>" >
             <a href="#" class="dropdown-toggle">
                 <i class="icon-user"></i>
-                <span class="menu-text"> 用户管理 </span>
+                <span class="menu-text"> 需求管理 </span>
 
                 <b class="arrow icon-angle-down"></b>
             </a>
 
-            <ul class="submenu" style="display:<?php echo $rArr0 == 'user' ? 'block' : 'none'; ?>">
+            <ul class="submenu" style="display:<?php echo $rArr0 == 'task' ? 'block' : 'none'; ?>">
                 <li <?php echo $rArr1 == 'student-list' ? 'class="active"' : ''; ?>>
-                    <a href="<?php echo Yii::$app->urlManager->createUrl('user/student-list'); ?>">
+                    <a href="<?php echo Yii::$app->urlManager->createUrl('task/list'); ?>">
                         <i class="icon-double-angle-right"></i>
-                        学生列表
+                        需求列表
                     </a>
                 </li>
 
@@ -83,20 +83,6 @@ if (strpos($rStr, '/')) {
                     <a href="<?php echo Yii::$app->urlManager->createUrl('user/teacher-list'); ?>">
                         <i class="icon-double-angle-right"></i>
                         老师列表
-                    </a>
-                </li>
-
-                <li <?php echo $rArr1 == 'teacher-student-list' ? 'class="active"' : ''; ?>>
-                    <a href="<?php echo Yii::$app->urlManager->createUrl('user/teacher-student-list'); ?>">
-                        <i class="icon-double-angle-right"></i>
-                        师生关系列表
-                    </a>
-                </li>
-
-                <li <?php echo $rArr1 == 'admin-user-list' ? 'class="active"' : ''; ?>>
-                    <a href="<?php echo Yii::$app->urlManager->createUrl('user/admin-user-list'); ?>">
-                        <i class="icon-double-angle-right"></i>
-                        管理员列表
                     </a>
                 </li>
 

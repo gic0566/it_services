@@ -116,7 +116,7 @@ class TaskController extends ActiveController {
      */
     public function actionPublishNew() {
         $post_arr = Yii::$app->request->post();
-        $post_arr = ApiTool::post_format($post_arr);
+        $post_arr = ApiTool::post_format($post_arr); 
         $title = isset($post_arr['title']) ? $post_arr['title'] : '';
         $content = isset($post_arr['content']) ? $post_arr['content'] : '';
         $category = isset($post_arr['category']) ? intval($post_arr['category']) : '0';
