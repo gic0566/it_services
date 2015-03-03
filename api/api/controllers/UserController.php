@@ -650,7 +650,7 @@ class UserController extends ActiveController {
 
         $query = (new \yii\db\Query())
                 ->select('eu.short_name,eu.true_name,eu.logo elogo,eu.level,eu.skill,eu.area_x,eu.area_y,eu.province,'
-                        . 'eu.city,eu.district,eu.length_service service,eu.summary,eu.mobile,eu.email,eu.cu.address')
+                        . 'eu.city,eu.district,eu.length_service service,eu.summary,eu.mobile,eu.email,eu.address')
                 ->from('it_expert_user eu,it_user u');
         $query->where('eu.uid=u.id');
         $query->andWhere('u.id=' . $uid);
