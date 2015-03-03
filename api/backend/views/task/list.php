@@ -56,7 +56,7 @@ use yii\widgets\LinkPager;
             <div class="page-content">
                 <div class="page-header">
                     <h1>
-                        图书列表
+                        需求列表
                         <small>
                             <i class="icon-double-angle-right"></i>
                             <!--Static &amp; Dynamic Tables-->
@@ -100,63 +100,24 @@ use yii\widgets\LinkPager;
                                             <?php foreach ($taskArr as $k => $v): ?>
                                                 <tr>
 
-                                                    <th><?php echo $v['id']; ?></th>
-                                                    <td><?= Html::img('http://' . $image_ip . '/' . $v['file_path'] . $v['file_name'], ['width' => '50', 'height' => '50']); ?></td>
+                                                    <th><?php echo $v['task_id']; ?></th>
                                                     <td>
-                                                        <a href="<?php echo \Yii::$app->urlManager->createUrl(['book/book-edit', 'id' => $v['id']]); ?>"><?php echo $v['name']; ?></a>
+                                                        <a href="<?php echo \Yii::$app->urlManager->createUrl(['book/book-edit', 'id' => $v['task_id']]); ?>"><?php echo $v['title']; ?></a>
                                                     </td>
-                                                    <td>
-                                                        <?php
-                                                        switch ($v['series']) {
-                                                            case '1':
-                                                                echo '考试系列';
-                                                                break;
-                                                            case '2':
-                                                                echo '练习系列';
-                                                                break;
-                                                            case '3':
-                                                                echo '流行系列';
-                                                                break;
-                                                            default :
-                                                                echo '暂未归类';
-                                                                break;
-                                                        }
-                                                        ?>
-                                                    </td>
-                                                    <td>
-                                                        <?php
-                                                        switch ($v['instrument_type']) {
-                                                            case '1':
-                                                                echo '钢琴';
-                                                                break;
-                                                            case '2':
-                                                                echo '小提琴';
-                                                                break;
-                                                            case '3':
-                                                                echo '手风琴';
-                                                                break;
-                                                            case '4':
-                                                                echo '古筝';
-                                                                break;
-                                                            default :
-                                                                echo '暂未归类';
-                                                                break;
-                                                        }
-                                                        ?>
-                                                    </td>
-                                                    <td><?php echo $v['courses_num']; ?></td>
-                                                    <td><?php echo $v['author']; ?></td>
+
+                                                    <td><?php echo $v['title']; ?></td>
+                                                    <td><?php echo $v['title']; ?></td>
 
                                                     <td>
                                                         <?php echo date('Y-m-d H:i', $v['add_time']); ?>
                                                     </td>
                                                     <td>
                                                         <div class="visible-md visible-lg hidden-sm hidden-xs action-buttons">
-                                                            <?= Html::a('<i class="icon-tasks bigger-130"></i>', ['book/courses-list', 'id' => $v['id']]); ?>
-                                                            <a class="green" href="<?php echo YII::$app->urlManager->createUrl(['/book/book-edit', 'id' => $v['id']]); ?>">
+                                                            <?= Html::a('<i class="icon-tasks bigger-130"></i>', ['book/courses-list', 'id' => $v['task_id']]); ?>
+                                                            <a class="green" href="<?php echo YII::$app->urlManager->createUrl(['/book/book-edit', 'id' => $v['task_id']]); ?>">
                                                                 <i class="icon-pencil bigger-130"></i>
                                                             </a>
-                                                            <?= Html::a('<i class="icon-trash bigger-130"></i>', null, ['class' => 'bootbox-confirm-button', 'delete_attr' => \Yii::$app->urlManager->createUrl(['/book/update', 'id' => $v['id']])]); ?>
+                                                            <?= Html::a('<i class="icon-trash bigger-130"></i>', null, ['class' => 'bootbox-confirm-button', 'delete_attr' => \Yii::$app->urlManager->createUrl(['/book/update', 'id' => $v['task_id']])]); ?>
                                                         </div>
 
                                                         <!--                                                    <div class="visible-xs visible-sm hidden-md hidden-lg">

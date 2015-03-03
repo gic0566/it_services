@@ -426,7 +426,6 @@ class UserController extends ActiveController {
             $data = CompanyUser::find()->select('id')->where('uid=' . $uid)->asArray()->one();
             if (isset($data['id']) && !empty($data['id'])) {
                 $model = CompanyUser::findOne($data['id']);
-
                 if ($model) {
                     if ($short_name) {
                         $model->short_name = $short_name;
@@ -480,6 +479,19 @@ class UserController extends ActiveController {
                     if (!$model->update()) {
                         $this->arr['errno'] = '0';
                     }
+
+                    $query = (new \yii\db\Query())
+                            ->select('cu.short_name,cu.company_name,cu.logo clogo,cu.area_x,cu.area_y,cu.province,'
+                                    . 'cu.city,cu.district,cu.summary,cu.mobile,cu.email,cu.comment_score,cu.job,cu.contacts,cu.address')
+                            ->from('it_company_user cu,it_user u,it_task t');
+                    $query->where('cu.uid=u.id');
+                    $query->andWhere('u.id=' . $uid);
+
+                    $cdata = $query->one();
+                    if (is_array($cdata) && !empty($cdata)) {
+                        $cdata['clogo'] = $this->image_ip . $cdata['clogo'];
+                    }
+                    $this->arr['data'] = $cdata ? $cdata : '';
                 }
             }
         }
@@ -519,7 +531,7 @@ class UserController extends ActiveController {
                     }
 
                     if ($true_name) {
-                        $model->company_name = $true_name;
+                        $model->true_name = $true_name;
                     }
 
                     if ($province) {
@@ -562,6 +574,19 @@ class UserController extends ActiveController {
                     if (!$model->update()) {
                         $this->arr['errno'] = '0';
                     }
+
+                    $query = (new \yii\db\Query())
+                            ->select('eu.short_name,eu.true_name,eu.logo elogo,eu.level,eu.skill,eu.area_x,eu.area_y,eu.province,'
+                                    . 'eu.city,eu.district,eu.length_service service,eu.summary,eu.mobile,eu.email,eu.address')
+                            ->from('it_expert_user eu,it_user u');
+                    $query->where('eu.uid=u.id');
+                    $query->andWhere('u.id=' . $uid);
+
+                    $edata = $query->one();
+                    if (is_array($edata) && !empty($edata)) {
+                        $edata['elogo'] = $this->image_ip . $edata['elogo'];
+                    }
+                    $this->arr['data'] = $edata ? $edata : '';
                 }
             }
         }

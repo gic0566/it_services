@@ -56,12 +56,14 @@ class TaskController extends ActiveController {
      * 需求列表
      * @return type
      */
-    public function actionList($uid = '', $status = '9', $sort = '', $from = '0', $limit = '10') {
+    public function actionList($area = '', $cat_id = '0', $uid = '', $status = '9', $sort = '', $from = '0', $limit = '10') {
         $from = intval($from);
         $limit = intval($limit);
+        $cat_id = intval($cat_id);
         $uid = intval($uid); //公司id
         $status = intval($status);
         $sort = intval($sort);
+        $area = $area ? urldecode($area) : '';
         $query = (new \yii\db\Query())
                 ->select('t.category cat_id,cu.company_name cname,t.add_time,t.id task_id,t.title,t.status,t.uid,t.expert_id,cu.logo clogo,t.c_comment_level clevle,cu.area_x carea_x,cu.area_y carea_y')
                 ->from('it_task t,it_company_user cu');
@@ -78,6 +80,16 @@ class TaskController extends ActiveController {
             }
         } else {
             $query->andWhere('t.status=0');
+        }
+        
+        if(!empty($cat_id)){
+            $query->andWhere('category='.$cat_id);
+        }
+        
+        if (!empty($area) && strstr($area, ',')) {
+            $area_arr = explode(',', $area);
+            $query->andWhere('cu.province="' . $area_arr['0'] . '"');
+            $query->andWhere('cu.city="' . $area_arr['1'] . '"');
         }
 
         $query1 = clone $query;
