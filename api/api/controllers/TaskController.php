@@ -81,11 +81,11 @@ class TaskController extends ActiveController {
         } else {
             $query->andWhere('t.status=0');
         }
-        
-        if(!empty($cat_id)){
-            $query->andWhere('category='.$cat_id);
+
+        if (!empty($cat_id)) {
+            $query->andWhere('category=' . $cat_id);
         }
-        
+
         if (!empty($area) && strstr($area, ',')) {
             $area_arr = explode(',', $area);
             $query->andWhere('cu.province="' . $area_arr['0'] . '"');
@@ -128,7 +128,7 @@ class TaskController extends ActiveController {
      */
     public function actionPublishNew() {
         $post_arr = Yii::$app->request->post();
-        $post_arr = ApiTool::post_format($post_arr); 
+        $post_arr = ApiTool::post_format($post_arr);
         $title = isset($post_arr['title']) ? $post_arr['title'] : '';
         $content = isset($post_arr['content']) ? $post_arr['content'] : '';
         $category = isset($post_arr['category']) ? intval($post_arr['category']) : '0';
