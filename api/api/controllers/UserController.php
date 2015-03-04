@@ -682,6 +682,17 @@ class UserController extends ActiveController {
 
         $data = $query->one();
         if (is_array($data) && !empty($data)) {
+            if ('0' == $data['level']) {
+                $level_name = '新手上路';
+            } elseif ('1' == $data['level']) {
+                $level_name = '普通专家';
+            } elseif ('2' == $data['level']) {
+                $level_name = '资深专家';
+            } else {
+                $level_name = '暂无等级';
+            }
+            $data['level_name'] = $level_name;
+
             $data['elogo'] = $this->image_ip . $data['elogo'];
             $data['finish'] = Task::find()->where('expert_id=' . $uid)->andWhere('status=2')->count();
         }

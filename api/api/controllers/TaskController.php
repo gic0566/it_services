@@ -108,6 +108,7 @@ class TaskController extends ActiveController {
         if (!empty($data)) {
             foreach ($data AS $k => $v) {
                 //获取申请需求申请人数
+                $data[$k]['cat_name'] = 'IT>服务器>IBM';
                 $data[$k]['apply_num'] = TaskUser::find()->where('task_id=' . $v['task_id'])->count();
                 $data[$k]['clogo'] = $this->image_ip . $v['clogo'];
                 $data[$k]['add_time'] = date('Y-m-d', $v['add_time']);
@@ -401,6 +402,30 @@ class TaskController extends ActiveController {
         $data = Skill::find()->select('id,name')->where('parent_id=' . $pid)->all();
         $this->arr['data'] = $data;
         return $this->arr;
+    }
+    
+    /**
+     * 公司的需求列表
+     */
+    public function actionCompanyTaskList($uid = '0', $from = '0', $limit = '10') {
+        $uid = intval($uid);
+        $data = CompanyUser::find()->select('uid,company_name,logo')->where('uid=' . $uid)->asArray()->one();
+        if (is_array($data) && !empty($data)) {
+            $data['logo'] = $this->image_ip . $data['logo'];
+            $data['comment_level'] = '2';
+            $query = Task::find()->select('id,title,status,add_time,e_comment_level')->where('uid=' . $uid)->asArray();
+            $list = $query->offset($from)
+                    ->limit($limit)
+                    ->all();
+            if (!empty($list)) {
+            foreach ($list AS $k => $v) {
+                $list[$k]['add_time'] = date('Y-m-d',$v['add_time']);
+            }
+        }
+            $data['list'] = $list;
+            $this->arr['data'] = $data;
+            return $this->arr;
+        }
     }
 
     /**
