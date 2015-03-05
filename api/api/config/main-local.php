@@ -47,6 +47,7 @@ $config = [
                     'extraPatterns' => [
                         'GET list' => 'list', //需求列表
                         'GET company-task-list' => 'company-task-list', //公司需求列表
+                        'GET expert-task-list' => 'expert-task-list', //专家需求列表
                         'GET expert-skill' => 'expert-skill', //获取专长
                         'GET detail' => 'detail', //需求详情
                         'GET apply-expert-list' => 'apply-expert-list', //申请专家列表
