@@ -686,6 +686,7 @@ class UserController extends ActiveController {
                 //获取评论次数
                 $comment_times = Task::find()->where('e_comment_time!=0')->andWhere('expert_id=' . $v['uid'])->count();
                 $data[$k]['comment_level'] = $comment_times > 0 ? ($v['comment_score'] / ($comment_times * 5)) * 5 : '0';
+                $data[$k]['distance']='宣武区 < 6km';
 
                 unset($data[$k]['comment_score']);
             }
@@ -720,6 +721,7 @@ class UserController extends ActiveController {
                 $level_name = '暂无等级';
             }
             $data['level_name'] = $level_name;
+            $data['distance']='宣武区 < 10km';
 
             $data['elogo'] = $this->image_ip . $data['elogo'];
             $data['finish'] = Task::find()->where('expert_id=' . $uid)->andWhere('status=2')->count();

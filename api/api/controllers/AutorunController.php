@@ -91,6 +91,7 @@ class AutorunController extends ActiveController {
                     unset($data[$k]);
                     continue;
                 }
+                $data[$k]['comment_level'] = '4';
                 //判断用户是否在线
                 $data[$k]['online_status'] = (time() - $v['login_time']) > 3600 ? 'off' : 'on';
             }
