@@ -109,6 +109,7 @@ class TaskController extends ActiveController {
             foreach ($data AS $k => $v) {
                 //获取申请需求申请人数
                 $data[$k]['cat_name'] = 'IT>服务器>IBM';
+                $data[$k]['distance'] = '宣武区 < 6KM';
                 $data[$k]['apply_num'] = TaskUser::find()->where('task_id=' . $v['task_id'])->count();
                 $data[$k]['clogo'] = $this->image_ip . $v['clogo'];
                 $data[$k]['add_time'] = date('Y-m-d', $v['add_time']);
@@ -431,21 +432,31 @@ class TaskController extends ActiveController {
     /**
      * 专家的需求列表
      */
-    public function actionExpertTaskList($uid = '0', $from = '0', $limit = '10'){
+    public function actionExpertTaskList($uid = '0', $status = '2', $from = '0', $limit = '10') {
         $uid = intval($uid);
+        $status = intval($status);
         $data = ExpertUser::find()->select('id,uid,true_name,logo')->where('uid=' . $uid)->asArray()->one();
         if (is_array($data) && !empty($data)) {
             $data['logo'] = $this->image_ip . $data['logo'];
             $data['comment_level'] = '2';
             $query = Task::find()->select('id,title,status,add_time,c_comment_level')->where('expert_id=' . $data['id'])->asArray();
+
+            if (!empty($status)) {
+                if ($status != '9') {
+                    $query->andWhere('t.status=' . $status);
+                }
+            } else {
+                $query->andWhere('t.status=0');
+            }
+
             $list = $query->offset($from)
                     ->limit($limit)
                     ->all();
             if (!empty($list)) {
-            foreach ($list AS $k => $v) {
-                $list[$k]['add_time'] = date('Y-m-d',$v['add_time']);
+                foreach ($list AS $k => $v) {
+                    $list[$k]['add_time'] = date('Y-m-d', $v['add_time']);
+                }
             }
-        }
             $data['list'] = $list;
             $this->arr['data'] = $data;
             return $this->arr;

@@ -27,7 +27,7 @@ class ApiTool extends Model {
     function post_format($arr = '') {
         if (is_array($arr) && !empty($arr)) {
             foreach ($arr as $k => $v) {
-                $arr[$k] = urldecode($v);
+                $arr[$k] = urldecode(trim($v));
             }
         }
         return $arr;
