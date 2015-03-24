@@ -722,6 +722,12 @@ class UserController extends ActiveController {
             }
             $data['level_name'] = $level_name;
             $data['distance']='宣武区 < 10km';
+            
+            if(!empty($data['skill'])){
+                
+            }
+            
+            $data['skill_name']='操作系统 win8';
 
             $data['elogo'] = $this->image_ip . $data['elogo'];
             $data['finish'] = Task::find()->where('expert_id=' . $uid)->andWhere('status=2')->count();

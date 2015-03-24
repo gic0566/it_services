@@ -56,7 +56,7 @@ class TaskController extends ActiveController {
      * 需求列表
      * @return type
      */
-    public function actionList($area = '', $cat_id = '0', $uid = '', $status = '9', $sort = '', $from = '0', $limit = '10') {
+    public function actionList($area = '', $cat_id = '0', $uid = '', $status = '9', $area_x = '', $area_y = '', $sort = '', $from = '0', $limit = '10') {
         $from = intval($from);
         $limit = intval($limit);
         $cat_id = intval($cat_id);
@@ -65,7 +65,7 @@ class TaskController extends ActiveController {
         $sort = intval($sort);
         $area = $area ? urldecode($area) : '';
         $query = (new \yii\db\Query())
-                ->select('t.category cat_id,cu.company_name cname,t.add_time,t.id task_id,t.title,t.status,t.uid,t.expert_id,cu.logo clogo,t.c_comment_level clevle,cu.area_x carea_x,cu.area_y carea_y')
+                ->select('t.category cat_id,cu.company_name cname,t.add_time,t.id task_id,t.title,t.status,t.uid,t.expert_id,cu.logo clogo,t.c_comment_level clevle,cu.area_x carea_x,cu.area_y carea_y,t.reward,cu.province,cu.city,cu.district')
                 ->from('it_task t,it_company_user cu');
 
         $query->where('t.uid=cu.uid');
@@ -95,8 +95,10 @@ class TaskController extends ActiveController {
         $query1 = clone $query;
         $total = $query1->count();
 
-        if ('1' == $sort) {
+        if ('1' == $sort) {//悬赏金额
             $query->orderBy('t.reward DESC');
+        } else if ('2' == $sort) {//信用
+        } else if ('3' == $sort) {//距离
         } else {
             $query->orderBy('t.add_time DESC');
         }
@@ -199,7 +201,7 @@ class TaskController extends ActiveController {
         $id = intval($id);
         $uid = intval($uid);
         $query = (new \yii\db\Query())
-                ->select('t.title,t.content,t.tips,t.reward,t.c_comment_level clevel,cu.mobile,cu.email,t.valid_end_time,t.category,cu.logo clogo,cu.province,cu.city,cu.district,t.id task_id')
+                ->select('t.title,t.content,t.tips,t.reward,t.c_comment_level clevel,cu.mobile,cu.email,t.valid_end_time,t.category,cu.logo clogo,cu.province,cu.city,cu.district,t.id task_id,t.status')
                 ->from('it_task t,it_company_user cu');
 
         $query->where('t.uid=cu.uid');
@@ -208,10 +210,11 @@ class TaskController extends ActiveController {
 
         $data = $query->one();
         if (!empty($data)) {
+            $data['cat_name'] = '测试分类';
+            $data['clogo'] = $this->image_ip.$data['clogo'];
             //判断用户是否申请过
             $data['is_apply'] = TaskUser::find()->where('task_id=' . $data['task_id'])->andWhere('proposer_id=' . $uid)->count();
             $data['valid_end_time'] = date('Y-m-d', $data['valid_end_time']);
-            $data['category'] = $this->expertSkill($data['category']);
             $this->arr['data'] = $data;
         }
 
@@ -244,11 +247,12 @@ class TaskController extends ActiveController {
     public function actionUpdateStatus() {
         $post_arr = Yii::$app->request->post();
         $id = isset($post_arr['task_id']) ? intval($post_arr['task_id']) : ''; //项目id
-        $status = isset($post_arr['status']) ? intval($post_arr['status']) : ''; //状态
+        $status = isset($post_arr['status']) ? intval($post_arr['status']) : '0'; //状态
+        
         if (!empty($id)) {
             $model = Task::findOne($id);
             if ($model) {
-                if ('3' == $status) {
+                if ('2' == $status) {
                     $model->finish_time = time();
                 }
                 $model->status = $status;
@@ -387,6 +391,8 @@ class TaskController extends ActiveController {
             foreach ($data AS $k => $v) {
                 $data[$k]['elogo'] = $this->image_ip . $v['elogo'];
                 $data[$k]['skill'] = $this->expertSkill($v['skill']);
+                $data[$k]['distance'] = '宣武区 < 6km';
+                $data[$k]['level_name'] = '新手上路';
             }
             $this->arr['data'] = $data;
             $this->arr['total'] = $total;
@@ -404,7 +410,7 @@ class TaskController extends ActiveController {
         $this->arr['data'] = $data;
         return $this->arr;
     }
-    
+
     /**
      * 公司的需求列表
      */
@@ -419,40 +425,6 @@ class TaskController extends ActiveController {
                     ->limit($limit)
                     ->all();
             if (!empty($list)) {
-            foreach ($list AS $k => $v) {
-                $list[$k]['add_time'] = date('Y-m-d',$v['add_time']);
-            }
-        }
-            $data['list'] = $list;
-            $this->arr['data'] = $data;
-            return $this->arr;
-        }
-    }
-    
-    /**
-     * 专家的需求列表
-     */
-    public function actionExpertTaskList($uid = '0', $status = '2', $from = '0', $limit = '10') {
-        $uid = intval($uid);
-        $status = intval($status);
-        $data = ExpertUser::find()->select('id,uid,true_name,logo')->where('uid=' . $uid)->asArray()->one();
-        if (is_array($data) && !empty($data)) {
-            $data['logo'] = $this->image_ip . $data['logo'];
-            $data['comment_level'] = '2';
-            $query = Task::find()->select('id,title,status,add_time,c_comment_level')->where('expert_id=' . $data['id'])->asArray();
-
-            if (!empty($status)) {
-                if ($status != '9') {
-                    $query->andWhere('t.status=' . $status);
-                }
-            } else {
-                $query->andWhere('t.status=0');
-            }
-
-            $list = $query->offset($from)
-                    ->limit($limit)
-                    ->all();
-            if (!empty($list)) {
                 foreach ($list AS $k => $v) {
                     $list[$k]['add_time'] = date('Y-m-d', $v['add_time']);
                 }
@@ -461,6 +433,51 @@ class TaskController extends ActiveController {
             $this->arr['data'] = $data;
             return $this->arr;
         }
+    }
+
+    /**
+     * 专家的需求列表
+     */
+    public function actionExpertTaskList($uid = '0', $status = '9', $from = '0', $limit = '10') {
+        $from = intval($from);
+        $limit = intval($limit);
+        $uid = intval($uid); //专家id
+        $status = intval($status);
+        $query = (new \yii\db\Query())
+                ->select('t.add_time,t.id task_id,t.title,t.status,t.uid company_id,cu.logo clogo')
+                ->from('it_task t,it_company_user cu');
+
+        $query->where('t.uid=cu.uid');
+
+        if (!empty($uid)) {//公司id
+            $query->andWhere('t.expert_id=' . $uid);
+        }
+
+        if (!empty($status)) {
+            if ($status != '9') {
+                $query->andWhere('t.status=' . $status);
+            }
+        } else {
+            $query->andWhere('t.status=0');
+        }
+
+        $query1 = clone $query;
+        $total = $query1->count();
+
+        $data = $query->offset($from)
+                ->limit($limit)
+                ->all();
+
+        if (!empty($data)) {
+            foreach ($data AS $k => $v) {
+                $data[$k]['cat_name'] = 'IT>服务器>IBM';
+                $data[$k]['clogo'] = $this->image_ip . $v['clogo'];
+                $data[$k]['add_time'] = date('Y-m-d', $v['add_time']);
+            }
+            $this->arr['data']['total'] = $uid ? $total : '0';
+            $this->arr['data']['list'] = $uid ? $data : '';
+        }
+        return $this->arr;
     }
 
     /**

@@ -56,21 +56,24 @@ use yii\widgets\LinkPager;
             <div class="page-content">
                 <div class="page-header">
                     <h1>
-                        需求列表
+                        专长列表
                         <small>
                             <i class="icon-double-angle-right"></i>
+                            <?php if (isset($_GET['parent_id'])): ?><?php echo $_GET['parent_name'] ?><?php endif; ?>
                             <!--Static &amp; Dynamic Tables-->
                         </small>
                     </h1>
+
 
                 </div><!-- /.page-header -->
 
                 <div class="row">
                     <div class="col-xs-12">
                         <div class="row">
-                            <!--                            <div class="col-xs-12">
-                                                            <p><button class="btn btn-white" onclick="location.href = '<?php echo \Yii::$app->urlManager->createUrl('book/create') ?>'">添加图书</button></p>
-                                                        </div>-->
+                            <div class="col-xs-12">
+                                <p><button class="btn btn-white" onclick="location.href = '<?php echo \Yii::$app->urlManager->createUrl('task/category-add') ?>'">添加分类</button></p>
+                            </div>
+
 
                         </div>
                         <div class="row">
@@ -86,34 +89,29 @@ use yii\widgets\LinkPager;
                                         <thead>
                                             <tr>
                                                 <th>ID</th>
-                                                <th>标题</th>                                                
-                                                <th>赏金</th>
-                                                <th>状态</th>
-                                                <th>添加时间</th>
+                                                <th>名称</th>                                                
                                                 <th>操作</th>
                                             </tr>
                                         </thead>
 
                                         <tbody>
 
-                                            <?php foreach ($taskArr as $k => $v): ?>
+                                            <?php foreach ($data as $k => $v): ?>
                                                 <tr>
 
-                                                    <th><?php echo $v['task_id']; ?></th>
+                                                    <th><?php echo $v['id']; ?></th>
                                                     <td>
-                                                        <a href="<?php echo \Yii::$app->urlManager->createUrl(['/task/detail', 'id' => $v['task_id']]); ?>"><?php echo $v['title']; ?></a>
+                                                        <a href="<?php echo \Yii::$app->urlManager->createUrl(['/task/category-edit', 'id' => $v['id']]); ?>"><?php echo $v['name']; ?></a>
                                                     </td>
-                                                    <th><?php echo $v['reward']; ?></th>
-                                                    <th><?php echo $v['status_name']; ?></th>
-                                                    <td>
-                                                        <?php echo date('Y-m-d H:i', $v['add_time']); ?>
-                                                    </td>
+
                                                     <td>
                                                         <div class="visible-md visible-lg hidden-sm hidden-xs action-buttons">
-                                                            <a class="green" href="<?php echo \Yii::$app->urlManager->createUrl(['/task/detail', 'id' => $v['task_id']]); ?>">
+                                                            <a class="green" href="<?php echo \Yii::$app->urlManager->createUrl(['/task/category-edit', 'id' => $v['id']]); ?>">
                                                                 <i class="icon-pencil bigger-130"></i>
                                                             </a>
-                                                            <?= Html::a('<i class="icon-trash bigger-130"></i>', null, ['class' => 'bootbox-confirm-button', 'delete_attr' => \Yii::$app->urlManager->createUrl(['/task/delete', 'id' => $v['task_id']])]); ?>
+                                                            <?php if (!isset($_GET['parent_id'])): ?>
+                                                                <a href="/index.php?r=task/category-list&parent_id=<?php echo $v['id'] ?>&parent_name=<?php echo $v['name'] ?>" title="查看子级"><i class="icon-tasks bigger-130"></i></a>
+                                                            <?php endif ?>
                                                         </div>
 
                                                         <!--                                                    <div class="visible-xs visible-sm hidden-md hidden-lg">

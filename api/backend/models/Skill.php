@@ -10,6 +10,12 @@ class Skill extends ActiveRecord {
         return '{{%skill}}';
     }
 
+    public function rules() {
+        return [
+            [['name','parent_id'], 'required'], //此处required曾经写错require导致错误
+        ];
+    }
+
     public function fields() {
         $fields = parent::fields();
         // remove fields that contain sensitive information

@@ -55,16 +55,39 @@ use yii\widgets\ActiveForm;
             <div class="page-content">
                 <div class="page-header">
                     <h1>
-                        Form Elements
+                        添加专长
                         <small>
                             <i class="icon-double-angle-right"></i>
-                            Common form elements and layouts
+
                         </small>
                     </h1>
                 </div><!-- /.page-header -->
 
                 <div class="row">
                     <div class="col-xs-12 col-lg-12">
+                        <!-- PAGE CONTENT BEGINS -->       
+
+                        <?php $form = ActiveForm::begin(['options' => ['class' => 'form-horizontal', 'enctype' => 'multipart/form-data']]); ?>
+
+                        <div class="form-group">
+                            <div class="col-sm-3">
+                                <?= $form->field($model, 'name')->label('分类名称'); ?>
+                            </div>
+                        </div>
+
+                        <div class="form-group">
+                            <div class="col-sm-3">
+                                <?= $form->field($model, 'parent_id')->label('父级')->dropDownList($data); ?>
+                            </div>
+                        </div>
+
+
+                        <div class="form-group">
+                            <?= Html::submitButton('提交', ['class' => 'btn btn-primary']) ?>
+                            <?= Html::Button('返回列表', ['class' => 'btn btn-primary', 'onclick' => 'history.go(-1)']) ?>
+                        </div>
+
+                        <?php ActiveForm::end(); ?>
 
                     </div><!-- /.col -->
                 </div><!-- /.row -->
@@ -76,10 +99,6 @@ use yii\widgets\ActiveForm;
         <i class="icon-double-angle-up icon-only bigger-110"></i>
     </a>
 </div><!-- /.main-container -->
-
-
-
-
 
 <?php echo \Yii::$app->view->renderFile('@app/views/inc/footer.php'); ?>
 

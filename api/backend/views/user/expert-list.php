@@ -56,7 +56,7 @@ use yii\widgets\LinkPager;
             <div class="page-content">
                 <div class="page-header">
                     <h1>
-                        需求列表
+                        专家列表
                         <small>
                             <i class="icon-double-angle-right"></i>
                             <!--Static &amp; Dynamic Tables-->
@@ -86,34 +86,38 @@ use yii\widgets\LinkPager;
                                         <thead>
                                             <tr>
                                                 <th>ID</th>
-                                                <th>标题</th>                                                
-                                                <th>赏金</th>
-                                                <th>状态</th>
-                                                <th>添加时间</th>
+                                                <th>用户名</th>
+                                                <th>头像</th>
+                                                <th>真名</th>                                                
+                                                <th>电话</th>
+                                                <th>注册时间</th>
                                                 <th>操作</th>
                                             </tr>
                                         </thead>
 
                                         <tbody>
 
-                                            <?php foreach ($taskArr as $k => $v): ?>
+                                            <?php foreach ($expertArr as $k => $v): ?>
                                                 <tr>
 
-                                                    <th><?php echo $v['task_id']; ?></th>
+                                                    <th><?php echo $v['id']; ?></th>
+                                                    <th><a href="<?php echo \Yii::$app->urlManager->createUrl(['/user/expert-detail', 'id' => $v['id']]); ?>"><?php echo $v['name']; ?></a></th>
+                                                    <th><img src="<?php echo $v['logo']; ?>" width="50" height="50"></th>
                                                     <td>
-                                                        <a href="<?php echo \Yii::$app->urlManager->createUrl(['/task/detail', 'id' => $v['task_id']]); ?>"><?php echo $v['title']; ?></a>
+                                                        <?php echo $v['true_name']; ?>
                                                     </td>
-                                                    <th><?php echo $v['reward']; ?></th>
-                                                    <th><?php echo $v['status_name']; ?></th>
+                                                    <th><?php echo $v['mobile']; ?></th>
                                                     <td>
                                                         <?php echo date('Y-m-d H:i', $v['add_time']); ?>
                                                     </td>
                                                     <td>
                                                         <div class="visible-md visible-lg hidden-sm hidden-xs action-buttons">
-                                                            <a class="green" href="<?php echo \Yii::$app->urlManager->createUrl(['/task/detail', 'id' => $v['task_id']]); ?>">
+                                                            <a class="green" href="<?php echo \Yii::$app->urlManager->createUrl(['user/expert-detail', 'id' => $v['id']]); ?>">
                                                                 <i class="icon-pencil bigger-130"></i>
                                                             </a>
-                                                            <?= Html::a('<i class="icon-trash bigger-130"></i>', null, ['class' => 'bootbox-confirm-button', 'delete_attr' => \Yii::$app->urlManager->createUrl(['/task/delete', 'id' => $v['task_id']])]); ?>
+                                                            <a class="green" href="<?php echo \Yii::$app->urlManager->createUrl(['task/list', 'expert_id' => $v['id']]); ?>">
+                                                                <i class="icon-tasks bigger-130"></i>
+                                                            </a>
                                                         </div>
 
                                                         <!--                                                    <div class="visible-xs visible-sm hidden-md hidden-lg">

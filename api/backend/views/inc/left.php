@@ -63,7 +63,7 @@ if (strpos($rStr, '/')) {
                     </a>
                 </li>-->
 
-        <li class="<?php echo $rArr0 == 'user' ? 'active open' : ''; ?>" >
+        <li class="<?php echo $rArr0 == 'task' ? 'active open' : ''; ?>" >
             <a href="#" class="dropdown-toggle">
                 <i class="icon-user"></i>
                 <span class="menu-text"> 需求管理 </span>
@@ -72,19 +72,20 @@ if (strpos($rStr, '/')) {
             </a>
 
             <ul class="submenu" style="display:<?php echo $rArr0 == 'task' ? 'block' : 'none'; ?>">
-                <li <?php echo $rArr1 == 'student-list' ? 'class="active"' : ''; ?>>
+                <li <?php echo $rArr1 == 'list' ? 'class="active"' : ''; ?>>
                     <a href="<?php echo Yii::$app->urlManager->createUrl('task/list'); ?>">
                         <i class="icon-double-angle-right"></i>
                         需求列表
                     </a>
                 </li>
-
-                <li <?php echo $rArr1 == 'teacher-list' ? 'class="active"' : ''; ?>>
-                    <a href="<?php echo Yii::$app->urlManager->createUrl('user/teacher-list'); ?>">
+                <li <?php echo $rArr1 == 'category-list' ? 'class="active"' : ''; ?>>
+                    <a href="<?php echo Yii::$app->urlManager->createUrl('task/category-list'); ?>">
                         <i class="icon-double-angle-right"></i>
-                        老师列表
+                        专长列表
                     </a>
                 </li>
+
+
 
                 <!--                <li>
                                     <a href="treeview.html">
@@ -178,25 +179,26 @@ if (strpos($rStr, '/')) {
                     </ul>
                 </li>-->
 
-        <li class="<?php echo $rArr0 == 'book' ? 'active open' : ''; ?>">
+        <li class="<?php echo $rArr0 == 'user' ? 'active open' : ''; ?>">
             <a href="#" class="dropdown-toggle">
                 <i class="icon-book"></i>
-                <span class="menu-text"> 教材管理 </span>
+                <span class="menu-text"> 用户管理 </span>
 
                 <b class="arrow icon-angle-down"></b>
             </a>
 
-            <ul class="submenu" style="display:<?php echo $rArr0 == 'book' ? 'block' : 'none'; ?>">
-                <li <?php echo $rArr1 == 'book-list' ? 'class="active"' : ''; ?>>
-                    <a href="<?php echo Yii::$app->urlManager->createUrl('book/book-list'); ?>">
+            <ul class="submenu" style="display:<?php echo $rArr0 == 'user' ? 'block' : 'none'; ?>">
+                <li <?php echo $rArr1 == 'company-list' ? 'class="active"' : ''; ?>>
+                    <a href="<?php echo Yii::$app->urlManager->createUrl('user/company-list'); ?>">
                         <i class="icon-double-angle-right"></i>
-                        图书列表
+                        公司列表
                     </a>
                 </li>
-                <li <?php echo $rArr1 == 'courses-list' ? 'class="active"' : ''; ?>>
-                    <a href="<?php echo Yii::$app->urlManager->createUrl('book/courses-list'); ?>">
+
+                <li <?php echo $rArr1 == 'expert-list' ? 'class="active"' : ''; ?>>
+                    <a href="<?php echo Yii::$app->urlManager->createUrl('user/expert-list'); ?>">
                         <i class="icon-double-angle-right"></i>
-                        课程列表
+                        专家列表
                     </a>
                 </li>
 
@@ -222,173 +224,6 @@ if (strpos($rStr, '/')) {
                                 </li>-->
             </ul>
         </li>
-
-        <li class="<?php echo $rArr0 == 'question' ? 'active open' : ''; ?>" >
-            <a href="#" class="dropdown-toggle">
-                <i class="icon-question-sign"></i>
-                <span class="menu-text"> 问答管理 </span>
-
-                <b class="arrow icon-angle-down"></b>
-            </a>
-
-            <ul class="submenu" style="display:<?php echo $rArr0 == 'question' ? 'block' : 'none'; ?>">
-                <li <?php echo $rArr1 == 'question-list' ? 'class="active"' : ''; ?>>
-                    <a href="<?php echo Yii::$app->urlManager->createUrl('question/question-list'); ?>">
-                        <i class="icon-double-angle-right"></i>
-                        问题列表
-                    </a>
-                </li>
-
-
-                <!--                <li>
-                                    <a href="treeview.html">
-                                        <i class="icon-double-angle-right"></i>
-                                        树菜单
-                                    </a>
-                                </li>
-                
-                                <li>
-                                    <a href="jquery-ui.html">
-                                        <i class="icon-double-angle-right"></i>
-                                        jQuery UI
-                                    </a>
-                                </li>
-                
-                                <li>
-                                    <a href="nestable-list.html">
-                                        <i class="icon-double-angle-right"></i>
-                                        可拖拽列表
-                                    </a>
-                                </li>
-                
-                                <li>
-                                    <a href="#" class="dropdown-toggle">
-                                        <i class="icon-double-angle-right"></i>
-                
-                                        三级菜单
-                                        <b class="arrow icon-angle-down"></b>
-                                    </a>
-                
-                                    <ul class="submenu">
-                                        <li>
-                                            <a href="#">
-                                                <i class="icon-leaf"></i>
-                                                第一级
-                                            </a>
-                                        </li>
-                
-                                        <li>
-                                            <a href="#" class="dropdown-toggle">
-                                                <i class="icon-pencil"></i>
-                
-                                                第四级
-                                                <b class="arrow icon-angle-down"></b>
-                                            </a>
-                
-                                            <ul class="submenu">
-                                                <li>
-                                                    <a href="#">
-                                                        <i class="icon-plus"></i>
-                                                        添加产品
-                                                    </a>
-                                                </li>
-                
-                                                <li>
-                                                    <a href="#">
-                                                        <i class="icon-eye-open"></i>
-                                                        查看商品
-                                                    </a>
-                                                </li>
-                                            </ul>
-                                        </li>
-                                    </ul>
-                                </li>-->
-            </ul>
-        </li>
-
-        <li class="<?php echo $rArr0 == 'message' ? 'active open' : ''; ?>" >
-            <a href="#" class="dropdown-toggle">
-                <i class="icon-volume-up"></i>
-                <span class="menu-text"> 信息管理 </span>
-
-                <b class="arrow icon-angle-down"></b>
-            </a>
-
-            <ul class="submenu" style="display:<?php echo $rArr0 == 'message' ? 'block' : 'none'; ?>">
-                <li <?php echo $rArr1 == 'notice-list' ? 'class="active"' : ''; ?>>
-                    <a href="<?php echo Yii::$app->urlManager->createUrl('message/notice-list'); ?>">
-                        <i class="icon-double-angle-right"></i>
-                        通知列表
-                    </a>
-                </li>
-
-
-                <!--                <li>
-                                    <a href="treeview.html">
-                                        <i class="icon-double-angle-right"></i>
-                                        树菜单
-                                    </a>
-                                </li>
-                
-                                <li>
-                                    <a href="jquery-ui.html">
-                                        <i class="icon-double-angle-right"></i>
-                                        jQuery UI
-                                    </a>
-                                </li>
-                
-                                <li>
-                                    <a href="nestable-list.html">
-                                        <i class="icon-double-angle-right"></i>
-                                        可拖拽列表
-                                    </a>
-                                </li>
-                
-                                <li>
-                                    <a href="#" class="dropdown-toggle">
-                                        <i class="icon-double-angle-right"></i>
-                
-                                        三级菜单
-                                        <b class="arrow icon-angle-down"></b>
-                                    </a>
-                
-                                    <ul class="submenu">
-                                        <li>
-                                            <a href="#">
-                                                <i class="icon-leaf"></i>
-                                                第一级
-                                            </a>
-                                        </li>
-                
-                                        <li>
-                                            <a href="#" class="dropdown-toggle">
-                                                <i class="icon-pencil"></i>
-                
-                                                第四级
-                                                <b class="arrow icon-angle-down"></b>
-                                            </a>
-                
-                                            <ul class="submenu">
-                                                <li>
-                                                    <a href="#">
-                                                        <i class="icon-plus"></i>
-                                                        添加产品
-                                                    </a>
-                                                </li>
-                
-                                                <li>
-                                                    <a href="#">
-                                                        <i class="icon-eye-open"></i>
-                                                        查看商品
-                                                    </a>
-                                                </li>
-                                            </ul>
-                                        </li>
-                                    </ul>
-                                </li>-->
-            </ul>
-        </li>
-
         <!--        <li>
                     <a href="widgets.html">
                         <i class="icon-list-alt"></i>

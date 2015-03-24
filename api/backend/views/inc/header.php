@@ -302,7 +302,7 @@ use yii\helpers\Url;
                                 <img class="nav-user-photo" src="" alt="Jason's Photo" />
                                 <span class="user-info">
                                     <small>欢迎光临,</small>
-                                    Jason
+                                    admin
                                 </span>
 
                                 <i class="icon-caret-down"></i>
@@ -326,7 +326,7 @@ use yii\helpers\Url;
                                 <li class="divider"></li>
 
                                 <li>
-                                    <a href="#">
+                                    <a href="<?php echo \Yii::$app->urlManager->createUrl('user/logout') ?>">
                                         <i class="icon-off"></i>
                                         退出
                                     </a>
