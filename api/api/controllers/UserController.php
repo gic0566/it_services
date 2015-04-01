@@ -448,7 +448,7 @@ class UserController extends ActiveController {
         $mobile = isset($post_arr['mobile']) ? $post_arr['mobile'] : '';
         $email = isset($post_arr['email']) ? $post_arr['email'] : '';
         $summary = isset($post_arr['summary']) ? $post_arr['summary'] : '';
-        $privacy = isset($post_arr['privacy']) ? intval($post_arr['privacy']) : '0';
+//        $privacy = isset($post_arr['privacy']) ? intval($post_arr['privacy']) : '0';
 
         if (!empty($uid)) {
             $data = CompanyUser::find()->select('id')->where('uid=' . $uid)->asArray()->one();
@@ -741,12 +741,13 @@ class UserController extends ActiveController {
      */
     public function actionUpdateExpertAreaxy() {
         $post_arr = Yii::$app->request->post();
-        $uid = isset($post_arr['uid']) ? intval($post_arr['uid']) : '0';
+//        $uid = isset($post_arr['uid']) ? intval($post_arr['uid']) : '0';
+        $auto_id = isset($post_arr['auto_id']) ? intval($post_arr['auto_id']) : '0';
         $area_x = isset($post_arr['area_x']) ? $post_arr['area_x'] : '';
         $area_y = isset($post_arr['area_y']) ? $post_arr['area_y'] : '';
-        $data = ExpertUser::find()->select('id')->where('uid=' . $uid)->asArray()->one();
-        if (isset($data['id']) && !empty($data['id'])) {
-            $model = ExpertUser::findOne($data['id']);
+//        $data = ExpertUser::find()->select('id')->where('uid=' . $uid)->asArray()->one();
+        if (isset($auto_id) && !empty($auto_id)) {
+            $model = ExpertUser::findOne($auto_id);
             if ($model) {
                 $model->area_x = $area_x;
                 $model->area_y = $area_y;
@@ -763,12 +764,13 @@ class UserController extends ActiveController {
      */
     public function actionUpdateCompanyAreaxy() {
         $post_arr = Yii::$app->request->post();
-        $uid = isset($post_arr['uid']) ? intval($post_arr['uid']) : '0';
+        $auto_id = isset($post_arr['auto_id']) ? intval($post_arr['auto_id']) : '0';
+//        $uid = isset($post_arr['uid']) ? intval($post_arr['uid']) : '0';
         $area_x = isset($post_arr['area_x']) ? $post_arr['area_x'] : '';
         $area_y = isset($post_arr['area_y']) ? $post_arr['area_y'] : '';
-        $data = CompanyUser::find()->select('id')->where('uid=' . $uid)->asArray()->one();
-        if (isset($data['id']) && !empty($data['id'])) {
-            $model = CompanyUser::findOne($data['id']);
+//        $data = CompanyUser::find()->select('id')->where('uid=' . $uid)->asArray()->one();
+        if (isset($auto_id) && !empty($auto_id)) {
+            $model = CompanyUser::findOne($auto_id);
             if ($model) {
                 $model->area_x = $area_x;
                 $model->area_y = $area_y;
